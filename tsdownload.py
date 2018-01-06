@@ -32,7 +32,7 @@ def getSegsNum(m3):
             tokens = line.split('-')
             idx = 0
             for i, tok in enumerate(tokens):
-                if '/seg' in tok:
+                if 'seg' == tok[-3:]:
                     idx = i + 1
                     break
             nsegs = int(tokens[idx])
