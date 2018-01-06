@@ -1,5 +1,6 @@
 """ download segmented mpeg video (.ts files) from streaming websites """
 import sys
+import os
 import requests
 
 M3URL = ""  # fill in: .m3u8 file url
@@ -7,7 +8,7 @@ SEG1URL = ""  # fill in: first ts segment file url
 REFERER = ""  # fill in: some websites require a specific referer website to allow the request
 
 OUTNAME = 'video.ts'  # default output file name
-LOC = "X:/Downloads/Video/"  # default save location
+LOC = ""  # default save location
 
 HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:57.0) Gecko/20100101 Firefox/57.0",
@@ -47,13 +48,24 @@ def dumpSegs(initUrl, n, path):
             segurl = initUrl.replace('seg-1-', 'seg-{:d}-'.format(i))
             seg = requests.get(segurl, headers=HEADERS)
             f.write(seg.content)
-            print('dumped seg%d.ts' % i, '  %d%%' % (i * 100 / n))
+            print(('dumped seg%d.ts' % i) + '  %d%%' % (i * 100 / n))
 
 
 if __name__ == "__main__":
-    PATH = LOC + OUTNAME
+    DEST = LOC + OUTNAME
     if len(sys.argv) > 1:
-        PATH = sys.argv[1]
+        DEST = sys.argv[1]
+    # validate destination:
+    delim = ''
+    if '\\' in DEST:
+        delim = '\\'
+    elif '/' in DEST:
+        delim = '/'
+    if delim:
+        PATH = ''.join(DEST.split(delim)[:-1])
+        if not os.path.isdir(PATH):
+            print('INAVLID DESTINATION.')
+            sys.exit(0)
     m3u8 = requests.get(M3URL, headers=HEADERS)
     nsegs = getSegsNum(m3u8)
-    dumpSegs(SEG1URL, nsegs, PATH)
+    dumpSegs(SEG1URL, nsegs, DEST)
