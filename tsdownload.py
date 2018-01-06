@@ -39,14 +39,20 @@ def getSegsNum(m3):
     return nsegs
 
 
-def dumpSegs(initUrl, n, path):
+def dumpSegs(initUrl, n, path, append=False):
     """ downlaod and combine the .ts files
     given the first seg's url, the number of segments and
     the destination download path """
-    with open(path, 'wb') as f:
+    with open(path, 'wb' if append else 'ab') as f:
         for i in range(1, n + 1):
             segurl = initUrl.replace('seg-1-', 'seg-{:d}-'.format(i))
-            seg = requests.get(segurl, headers=HEADERS)
+            success = False
+            while not success:
+                try:
+                    seg = requests.get(segurl, headers=HEADERS)
+                    success = True
+                except:
+                    print('retrying...')
             f.write(seg.content)
             print(('dumped seg%d.ts' % i) + '  %d%%' % (i * 100 / n))
 
