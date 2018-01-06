@@ -43,7 +43,7 @@ def dumpSegs(initUrl, n, path, append=False):
     """ downlaod and combine the .ts files
     given the first seg's url, the number of segments and
     the destination download path """
-    with open(path, 'wb' if append else 'ab') as f:
+    with open(path, 'ab' if append else 'wb') as f:
         for i in range(1, n + 1):
             segurl = initUrl.replace('seg-1-', 'seg-{:d}-'.format(i))
             success = False
