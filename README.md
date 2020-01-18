@@ -12,4 +12,4 @@
 ```    python tsdownload.py destination ```
 
   
-p.s. there're probably better, more robust tools out there, this was meant to quick and dirty oneoff script
+__p.s. There're probably better, more robust tools out there. This was meant to be a quick and dirty oneoff disposable script__ 🐒
