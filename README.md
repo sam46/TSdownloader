@@ -11,3 +11,5 @@
 3. Run:
 ```    python tsdownload.py destination ```
 
+  
+p.s. there're probably better, more robust tools out there, this was meant to quick and dirty oneoff script
