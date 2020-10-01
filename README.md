@@ -1,5 +1,5 @@
 # TSdownloader
-## download segmented mpeg video (.m3u8/.ts) from streaming websites
+## Download the segmented mpeg video (.m3u8/.ts) from streaming websites
 1. Make sure you have "requests" installed:
 ```    
        pip install requests
