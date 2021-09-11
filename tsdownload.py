@@ -47,7 +47,7 @@ def dumpSegments(segments, path, append=False):
                 except:
                     print('retrying...')
             f.write(seg.content)
-            print(('dumped segment %d' % i) + '  %d%%' % (i * 100 / n))
+            print(('Downloading segment: %d' % i) + '  progress: %d%%\r' % (i * 100 / n), end="")
 
 
 if __name__ == "__main__":
