@@ -3,8 +3,7 @@ import sys
 import os
 import requests
 
-M3URL = ""  # fill in: .m3u8 file url
-SEG1URL = ""  # fill in: first ts segment file url
+M3URL = "https://ts0-pl.tv.itself.cz/at/hls/media/vod_257_profile21.m3u8?start=1631362380&end=1631364000&device=f9bd99590153950fe5becdc4861279c6&auth=DVQqJQ5CUlNcV0ZFVEhQRlZcG1MIU0IXSQFDD1deRRlFXVZIUF5TXV9VEVRFRkFWRUdWWEAZRloHTQVeUAg"  # fill in: .m3u8 file url
 REFERER = ""  # fill in: some websites require a specific referer website to allow the request
 
 OUTNAME = 'video.ts'  # default output file name
@@ -23,42 +22,32 @@ HEADERS = {
 }
 
 
-def getSegsNum(m3):
+def getSegments(m3):
     """ figure out how many segments there are using the m3u8 file """
     lines = m3.text.split('\n')
-    nsegs = 0
+    segments = []
     for line in lines:
-        if '.ts' in line:
-            # tokens = line.split('-')
-            # idx = 0
-            # for i, tok in enumerate(tokens):
-            #     if 'seg' == tok[-3:]:
-            #         idx = i + 1
-            #         break
-            # nsegs = int(tokens[idx])
-            nsegs = nsegs + 1
-    print(nsegs)
-    return nsegs
+        if 'https://' in line:
+            segments.append(line)
+    return segments
 
 
-def dumpSegs(initUrl, n, path, append=False):
+def dumpSegments(segments, path, append=False):
     """ downlaod and combine the .ts files
-    given the first seg's url, the number of segments and
     the destination download path """
     with open(path, 'ab' if append else 'wb') as f:
-        for i in range(0, n):
-            # segurl = initUrl.replace('seg-1-', 'seg-{:d}-'.format(i))
-            segurl = initUrl.replace('/0/', '/{:d}/'.format(i))
-            print(segurl)
+        # i = 0
+        n = len(segments)
+        for i, segment in enumerate(segments):
             success = False
             while not success:
                 try:
-                    seg = requests.get(segurl, headers=HEADERS)
+                    seg = requests.get(segment, headers=HEADERS)
                     success = True
                 except:
                     print('retrying...')
             f.write(seg.content)
-            print(('dumped seg%d.ts' % i) + '  %d%%' % (i * 100 / n))
+            print(('dumped segment %d' % i) + '  %d%%' % (i * 100 / n))
 
 
 if __name__ == "__main__":
@@ -77,5 +66,5 @@ if __name__ == "__main__":
             print('INAVLID DESTINATION.')
             sys.exit(0)
     m3u8 = requests.get(M3URL, headers=HEADERS)
-    nsegs = getSegsNum(m3u8)
-    dumpSegs(SEG1URL, nsegs, DEST)
+    segments = getSegments(m3u8)
+    dumpSegments(segments, DEST)
