@@ -6,7 +6,7 @@ import requests
 M3URL = "https://ts0-pl.tv.itself.cz/at/hls/media/vod_257_profile21.m3u8?start=1631362380&end=1631364000&device=f9bd99590153950fe5becdc4861279c6&auth=DVQqJQ5CUlNcV0ZFVEhQRlZcG1MIU0IXSQFDD1deRRlFXVZIUF5TXV9VEVRFRkFWRUdWWEAZRloHTQVeUAg"  # fill in: .m3u8 file url
 REFERER = ""  # fill in: some websites require a specific referer website to allow the request
 
-OUTNAME = 'video.ts'  # default output file name
+OUTNAME = 'download/video.ts'  # default output file name
 LOC = ""  # default save location
 
 HEADERS = {
