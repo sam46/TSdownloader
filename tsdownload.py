@@ -44,6 +44,9 @@ def dumpSegments(segments, path, append=False):
                 try:
                     seg = requests.get(segment, headers=HEADERS)
                     success = True
+                except KeyboardInterrupt:
+                    print('Download canceled! ')
+                    sys.exit()
                 except:
                     print('retrying...')
             f.write(seg.content)
@@ -68,3 +71,4 @@ if __name__ == "__main__":
     m3u8 = requests.get(M3URL, headers=HEADERS)
     segments = getSegments(m3u8)
     dumpSegments(segments, DEST)
+    print('Video download complete!')
