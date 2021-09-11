@@ -28,14 +28,16 @@ def getSegsNum(m3):
     lines = m3.text.split('\n')
     nsegs = 0
     for line in lines:
-        if 'seg-' in line and '.ts' in line:
-            tokens = line.split('-')
-            idx = 0
-            for i, tok in enumerate(tokens):
-                if 'seg' == tok[-3:]:
-                    idx = i + 1
-                    break
-            nsegs = int(tokens[idx])
+        if '.ts' in line:
+            # tokens = line.split('-')
+            # idx = 0
+            # for i, tok in enumerate(tokens):
+            #     if 'seg' == tok[-3:]:
+            #         idx = i + 1
+            #         break
+            # nsegs = int(tokens[idx])
+            nsegs = nsegs + 1
+    print(nsegs)
     return nsegs
 
 
@@ -44,8 +46,10 @@ def dumpSegs(initUrl, n, path, append=False):
     given the first seg's url, the number of segments and
     the destination download path """
     with open(path, 'ab' if append else 'wb') as f:
-        for i in range(1, n + 1):
-            segurl = initUrl.replace('seg-1-', 'seg-{:d}-'.format(i))
+        for i in range(0, n):
+            # segurl = initUrl.replace('seg-1-', 'seg-{:d}-'.format(i))
+            segurl = initUrl.replace('/0/', '/{:d}/'.format(i))
+            print(segurl)
             success = False
             while not success:
                 try:
